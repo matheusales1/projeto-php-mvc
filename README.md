@@ -1,33 +1,5 @@
-## Instalação
-Você pode clonar este repositório OU baixar o .zip
+Criando a pagina de login e colocando as <?=$base;?>, sempre colocar a url base do seu site em todos os links.
 
-Ao descompactar, é necessário rodar o **composer** pra instalar as dependências e gerar o *autoload*.
+As informações do formaluario de login sao enviados para o signinAction e de lá é pego as informações do banco de dados e faz com que o usuario entre no site ou volte para o login.
 
-Vá até a pasta do projeto, pelo *prompt/terminal* e execute:
-> composer install
-
-Depois é só aguardar.
-
-## Configuração
-Todos os arquivos de **configuração** e aplicação estão dentro da pasta *src*.
-
-As configurações de Banco de Dados e URL estão no arquivo *src/Config.php*
-
-É importante configurar corretamente a constante *BASE_DIR*:
-> const BASE_DIR = '/**PastaDoProjeto**/public';
-
-## Uso
-Você deve acessar a pasta *public* do projeto.
-
-O ideal é criar um ***alias*** específico no servidor que direcione diretamente para a pasta *public*.
-
-## Modelo de MODEL
-```php
-<?php
-namespace src\models;
-use \core\Model;
-
-class Usuario extends Model {
-
-}
-```
+criei a function verifyLogin para verificar os logins e coloquei mensagens de erro caso o usuario erre a senha ou email.
