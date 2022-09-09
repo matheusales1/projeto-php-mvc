@@ -1,49 +1,91 @@
 <?php
+
 namespace src\controllers;
 
 use \core\Controller;
 use \src\handlers\LoginHandler;
 
-class LoginController extends Controller {
-    
+class LoginController extends Controller
+{
 
-    public function signin(){
+
+    public function signin() {
         //a mensagem so vai ser exibida uma unica vez
         $flash = '';
-
-        if(!empty($_SESSION['flash'])){
-            $flash = $_SESSION['flash'];    
+        
+        if (!empty($_SESSION['flash'])) {
+            $flash = $_SESSION['flash'];
             $_SESSION['flash'] = '';
-        }    
-        $this->render('login',['flash' => $flash]);
+        }
+        $this->render('signin', ['flash' => $flash]);
     }
 
     public function signinAction(){
-        $email = filter_input(INPUT_POST,'email',FILTER_VALIDATE_EMAIL);
-        $password = filter_input(INPUT_POST, 'password');
-// Verificando se o email e senha estao corretos (verifyLogin)
-        if($email && $password){
-            $token = LoginHandler::verifyLogin($email,$password);
 
-            if($token){
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $password = filter_input(INPUT_POST, 'password');
+        // Verificando se o email e senha estao corretos (verifyLogin)
+        if ($email && $password) {
+            $token = LoginHandler::verifyLogin($email, $password);
+
+            if ($token) {
                 $_SESSION['token'] = $token;
                 $this->redirect('/');
             } else {
                 $_SESSION['flash'] = 'E-mail e/ou senha invalidos.';
                 $this->redirect('/login');
             }
-
         } else {
             $_SESSION['flash'] = 'Digite os campos de e-mail e/ou senha.';
             $this->redirect('/login');
         }
-
     }
 
     public function signup(){
-        echo 'cadastro';
-        
+        $flash = '';
+
+        if (!empty($_SESSION['flash'])) {
+            $flash = $_SESSION['flash'];
+            $_SESSION['flash'] = '';
+        }
+        $this->render('signup', ['flash' => $flash]);
     }
+//recebe os dados e Verificar os dados do cadastro     
+    public function signupAction(){
+        $name = filter_input(INPUT_POST,'name');
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $password = filter_input(INPUT_POST, 'password');
+        $birthdate = filter_input(INPUT_POST,'birthdate');
+// Verifica se usuario preenche os 3 campos da data
+        if($name && $email && $password && $birthdate){
+            $birthdate = explode('/',$birthdate);
+            if(count($birthdate)!= 3){
+                $_SESSION['flash'] = 'Data de nascimento inválida';
+                $this->redirect('/cadastro');
+            }        
+// verifica se a data é real
+            $birthdate = $birthdate[2].'-'.$birthdate[1].'-'.$birthdate[0];
+            if(strtotime($birthdate)=== false){
+                $_SESSION['flash'] = 'Data de nascimento inválida';
+                $this->redirect('/cadastro');
+            }
 
+// Verifica se o e-mail já existe
+            if(LoginHandler::emailExists($email)=== false){
+            $token = LoginHandler::addUser($name,$email,$password,$birthdate);
+            $_SESSION['token'] = $token;
+            $this->redirect('/');
+            
+            } else {
+                $_SESSION['flash'] = 'E-mail já cadastrado!';
+                $this->redirect('/cadastro');
+            }
+            
 
+        } else {
+            $this->redirect('/cadastro');
+        }
+    }
 }
+    
+
