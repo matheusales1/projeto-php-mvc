@@ -5,8 +5,7 @@ namespace src\controllers;
 use \core\Controller;
 use \src\handlers\LoginHandler;
 
-class LoginController extends Controller
-{
+class LoginController extends Controller{
 
 
     public function signin() {
