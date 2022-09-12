@@ -79,8 +79,6 @@ class LoginController extends Controller{
                 $_SESSION['flash'] = 'E-mail já cadastrado!';
                 $this->redirect('/cadastro');
             }
-            
-
         } else {
             $this->redirect('/cadastro');
         }

@@ -51,6 +51,10 @@
                 </div>
                 <div class="menu-item-text">
                     Configurações
+                    <?php
+                    $a = 10;
+                    $a .= 5; 
+                    var_dump($a);?>
                 </div>
             </div>
         </a>
